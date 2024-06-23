@@ -6,7 +6,12 @@ module.exports = {
     './components/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        SpaceMono: ['Space Mono', 'monospace'],
+        Raleway: ['Raleway', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 };

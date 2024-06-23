@@ -14,11 +14,10 @@ const index = () => {
       <Text>index</Text>
       <Text>index</Text>
       <Text>index</Text>
-      <Text>index</Text>
-      <Text>index</Text>
-      <Text>index</Text>
-      <Text>index</Text>
-      <Text>index</Text>
+      <Text className='font-[100] font-Raleway'>indexyy</Text>
+      <Text className='font- font-[100]'>index</Text>
+      <Text className='font-SpaceMono font-[400]'>index</Text>
+      <Text className='font-Raleway font-[100]'>Raleway</Text>
       <Link href='(tabs)'>Go to (tabs)</Link>
       <Link href='/test'>Go to test</Link>
     </View>

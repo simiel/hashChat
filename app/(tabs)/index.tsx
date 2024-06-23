@@ -13,7 +13,7 @@ export default function HomeScreen() {
     <SafeAreaView className='bg-green-500 flex-1'>
       <ScrollView>
         <View style={styles.titleContainer}>
-          <Text className='text-red-500'>Welcome!</Text>
+          <Text className='text-red-500 font-Raleway'>Welcomexwy!</Text>
         </View>
         <View style={styles.stepContainer}>
           <Text>Step 1: Try it</Text>
@@ -27,6 +27,7 @@ export default function HomeScreen() {
         </View>
         <View style={styles.stepContainer}>
           <Text>Step 2: Explore</Text>
+          <Text className='font-Raleway font-extrabold'>Step 2: Explore</Text>
           <Text>
             Tap the Explore tab to learn more about what's included in this
             starter app.
