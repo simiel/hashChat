@@ -10,7 +10,7 @@ import {
 
 export default function HomeScreen() {
   return (
-    <SafeAreaView>
+    <SafeAreaView className='bg-green-500 flex-1'>
       <ScrollView>
         <View style={styles.titleContainer}>
           <Text className='text-red-500'>Welcome!</Text>
