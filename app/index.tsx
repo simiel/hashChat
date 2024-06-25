@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, { useLayoutEffect } from 'react';
-import { Link, Stack, useNavigation } from 'expo-router';
+import { Link, Stack, useNavigation, useRouter } from 'expo-router';
 
 const index = () => {
   const navigation = useNavigation();
@@ -14,6 +14,9 @@ const index = () => {
   useLayoutEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, []);
+
+  const router = useRouter();
+
   return (
     <SafeAreaView className='flex-1 '>
       <Text className='text-center text-5xl font-Raleway'>#Chat</Text>
@@ -26,7 +29,10 @@ const index = () => {
       />
       <Link href='(tabs)'>Go to (tabs)</Link>
       <Link href='/test'>Go to test</Link>
-      <TouchableOpacity className='bg-blue-400 rounded-xl p-4 text-white w-[90%] mt-auto mx-auto'>
+      <TouchableOpacity
+        className='bg-blue-400 rounded-xl p-4 text-white w-[90%] mt-auto mx-auto'
+        onPress={() => router.push('/test')}
+      >
         <Text
           className='text-center text-lg text-white
           font-Raleway font-semibold'
