@@ -25,7 +25,7 @@ const index = () => {
           Empower Your Mind: AI Support for Teens
         </Text>
         <Image
-          source={require('../assets/images/hashtag.png')}
+          source={require('../assets/images/hashtag2.png')}
           style={{ width: 200, height: 200, marginHorizontal: 'auto' }}
         />
         {/* <Link href='(tabs)'>Go to (tabs)</Link>
