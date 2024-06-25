@@ -26,7 +26,7 @@ const index = () => {
       />
       <Link href='(tabs)'>Go to (tabs)</Link>
       <Link href='/test'>Go to test</Link>
-      <TouchableOpacity className='bg-blue-500 rounded-full p-4 text-white w-[90%] mt-auto mx-auto'>
+      <TouchableOpacity className='bg-blue-400 rounded-xl p-4 text-white w-[90%] mt-auto mx-auto'>
         <Text
           className='text-center text-lg text-white
           font-Raleway font-semibold'
