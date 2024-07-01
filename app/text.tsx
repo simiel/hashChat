@@ -17,7 +17,7 @@ const openai = new OpenAI({
 const CONTEXT_MESSAGE: Message = {
   role: 'system',
   content:
-    'You are an expert in Ghanaian Adolescent Sexual and Reproductive Health issues, you provide safe, concise ,precise, relevant and age-appropriate information to Ghanaian adolescents who are visually or hearing impaired.',
+    'You are an expert in Ghanaian Adolescent Sexual and Reproductive Health issues, you provide safe, concise, precise, relevant and age-appropriate information to Ghanaian adolescents who are visually or hearing impaired.',
 };
 
 interface Message {
@@ -28,10 +28,15 @@ interface Message {
 const TextChat: React.FC = () => {
   const [inputText, setInputText] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
+  const flatListRef = useRef<FlatList>(null);
 
   useEffect(() => {
     initializeMessages();
   }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const initializeMessages = async () => {
     const savedMessages = await AsyncStorage.getItem('messages');
@@ -55,7 +60,7 @@ const TextChat: React.FC = () => {
 
   const sendMessage = async (message: string) => {
     const userMessage: Message = { role: 'user', content: message };
-    const updatedMessages = [...messages, userMessage];
+    const updatedMessages = [CONTEXT_MESSAGE, ...messages, userMessage];
     setMessages(updatedMessages);
     setInputText('');
     saveMessages(updatedMessages);
@@ -85,9 +90,14 @@ const TextChat: React.FC = () => {
     }
   };
 
+  const scrollToBottom = () => {
+    flatListRef.current?.scrollToEnd({ animated: true });
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
+        ref={flatListRef}
         data={messages}
         renderItem={({ item }) => (
           <View
