@@ -1,12 +1,155 @@
-import { View, Text } from 'react-native';
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  View,
+  Button,
+  Text,
+  TextInput,
+  FlatList,
+  StyleSheet,
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import OpenAI from 'openai';
 
-const text = () => {
+const openai = new OpenAI({
+  apiKey: 'sk-proj-1QeKnew1Z6MY3CazY3xNT3BlbkFJsP1dGVemeeQpvGRsnBMf',
+});
+
+const CONTEXT_MESSAGE: Message = {
+  role: 'system',
+  content:
+    'You are an expert in Ghanaian Adolescent Sexual and Reproductive Health issues, you provide safe, concise ,precise, relevant and age-appropriate information to Ghanaian adolescents who are visually or hearing impaired.',
+};
+
+interface Message {
+  role: 'user' | 'system' | 'assistant';
+  content: string;
+}
+
+const TextChat: React.FC = () => {
+  const [inputText, setInputText] = useState<string>('');
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  useEffect(() => {
+    initializeMessages();
+  }, []);
+
+  const initializeMessages = async () => {
+    const savedMessages = await AsyncStorage.getItem('messages');
+    const parsedMessages: Message[] = savedMessages
+      ? JSON.parse(savedMessages)
+      : [];
+    if (parsedMessages.length === 0) {
+      parsedMessages.push(CONTEXT_MESSAGE);
+    }
+    setMessages(parsedMessages);
+    saveMessages(parsedMessages);
+  };
+
+  const saveMessages = async (messages: Message[]) => {
+    try {
+      await AsyncStorage.setItem('messages', JSON.stringify(messages));
+    } catch (error) {
+      console.error('Error saving messages', error);
+    }
+  };
+
+  const sendMessage = async (message: string) => {
+    const userMessage: Message = { role: 'user', content: message };
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
+    setInputText('');
+    saveMessages(updatedMessages);
+    await sendToChatGPT(updatedMessages);
+  };
+
+  const sendToChatGPT = async (contextMessages: Message[]) => {
+    try {
+      const response = await openai.chat.completions.create({
+        model: 'gpt-3.5-turbo-16k',
+        messages: contextMessages,
+        max_tokens: 150,
+        n: 1,
+        stop: null,
+        temperature: 0.7,
+      });
+
+      const assistantMessage: Message = {
+        role: 'assistant',
+        content: response.choices[0].message.content || '',
+      };
+      const updatedMessages = [...contextMessages, assistantMessage];
+      setMessages(updatedMessages);
+      saveMessages(updatedMessages);
+    } catch (error) {
+      console.error('Error sending message to ChatGPT', error);
+    }
+  };
+
   return (
-    <View>
-      <Text>text</Text>
+    <View style={styles.container}>
+      <FlatList
+        data={messages}
+        renderItem={({ item }) => (
+          <View
+            style={
+              item.role === 'user'
+                ? styles.userMessage
+                : styles.assistantMessage
+            }
+          >
+            <Text>{item.content}</Text>
+          </View>
+        )}
+        keyExtractor={(item, index) => index.toString()}
+      />
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.textInput}
+          value={inputText}
+          onChangeText={setInputText}
+          placeholder='Type a message'
+        />
+        <Button
+          title='Send'
+          onPress={() => sendMessage(inputText)}
+          disabled={!inputText.trim()}
+        />
+      </View>
     </View>
   );
 };
 
-export default text;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  userMessage: {
+    alignSelf: 'flex-end',
+    backgroundColor: '#DCF8C6',
+    padding: 10,
+    borderRadius: 10,
+    marginVertical: 5,
+  },
+  assistantMessage: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#EAEAEA',
+    padding: 10,
+    borderRadius: 10,
+    marginVertical: 5,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textInput: {
+    flex: 1,
+    borderColor: '#CCC',
+    borderWidth: 1,
+    borderRadius: 20,
+    padding: 10,
+    marginRight: 10,
+  },
+});
+
+export default TextChat;

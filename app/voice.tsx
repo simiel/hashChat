@@ -31,7 +31,8 @@ const VoiceToText: React.FC = () => {
 
   const initialContextMessage = {
     role: 'user',
-    content: 'You are an AI chatbot for mental health.',
+    content:
+      'You are an expert in Ghanaian Adolescent Sexual and Reproductive Health issues, you provide safe, concise ,precise, relevant and age-appropriate information to Ghanaian adolescents who are visually or hearing impaired.',
   };
 
   useEffect(() => {

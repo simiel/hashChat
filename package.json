@@ -21,6 +21,7 @@
     "@react-native-voice/voice": "^3.2.4",
     "@react-navigation/native": "^6.0.2",
     "axios": "^1.7.2",
+    "eas-cli": "^0.24.1",
     "expo": "~51.0.14",
     "expo-constants": "~16.0.2",
     "expo-font": "~12.0.7",
