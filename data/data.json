@@ -1,0 +1,14 @@
+[
+  {
+    "question": "How do I handle file uploads in Express.js?",
+    "response": "To handle file uploads in Express.js, you can use the 'multer' middleware."
+  },
+  {
+    "question": "How do I connect MongoDB with my Express app?",
+    "response": "You can connect MongoDB with your Express app using Mongoose. First, install Mongoose with npm, then use it to define schemas and models."
+  },
+  {
+    "question": "How do I implement JWT authentication in Express?",
+    "response": "To implement JWT authentication in Express, use the 'jsonwebtoken' package to sign and verify tokens."
+  }
+]

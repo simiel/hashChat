@@ -60,7 +60,7 @@ const TextChat: React.FC = () => {
 
   const sendMessage = async (message: string) => {
     const userMessage: Message = { role: 'user', content: message };
-    const updatedMessages = [CONTEXT_MESSAGE, ...messages, userMessage];
+    const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
     setInputText('');
     saveMessages(updatedMessages);

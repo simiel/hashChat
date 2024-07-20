@@ -17,7 +17,8 @@
       "bundleIdentifier": "com.simiel.hashChat",
       "infoPlist": {
         "NSSpeechRecognitionUsageDescription": "This app requires access to speech recognition to convert your speech to text.",
-        "NSMicrophoneUsageDescription": "This app requires access to the microphone to record your speech."
+        "NSMicrophoneUsageDescription": "This app requires access to the microphone to record your speech.",
+        "NSCameraUsageDescription": "This app uses the camera to let user put a photo in his profile page."
       }
     },
     "android": {
@@ -25,7 +26,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.simiel.hashChat"
+      "package": "com.simiel.hashChat",
+      "permissions": ["android.permission.RECORD_AUDIO"]
     },
     "web": {
       "bundler": "metro",
@@ -34,11 +36,12 @@
     },
     "plugins": [
       "expo-router",
+      "@react-native-voice/voice",
       [
-        "@react-native-voice/voice",
+        "expo-stt",
         {
-          "microphonePermission": "CUSTOM: Allow $(PRODUCT_NAME) to access the microphone",
-          "speechRecognitionPermission": "CUSTOM: Allow $(PRODUCT_NAME) to securely recognize user speech"
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "speechRecognitionPermission": "Allow $(PRODUCT_NAME) to access your speech recognition"
         }
       ]
     ],

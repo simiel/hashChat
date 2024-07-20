@@ -36,7 +36,7 @@ const index = () => {
       </TouchableWithoutFeedback>
       <TouchableOpacity
         className='bg-blue-400 rounded-xl p-4 text-white w-[90%] mt-auto mx-auto'
-        onPress={() => router.push('/text')}
+        onPress={() => router.push('/offline')}
       >
         <Text
           className='text-center text-lg text-white

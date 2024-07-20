@@ -7,10 +7,7 @@ import {
   StyleSheet,
   Animated,
 } from 'react-native';
-import Voice, {
-  SpeechResultsEvent,
-  SpeechErrorEvent,
-} from '@react-native-voice/voice';
+import * as ExpoStt from 'expo-stt';
 import * as Speech from 'expo-speech';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import OpenAI from 'openai';
@@ -36,45 +33,34 @@ const VoiceToText: React.FC = () => {
   };
 
   useEffect(() => {
-    Voice.onSpeechResults = onSpeechResults;
-    Voice.onSpeechError = onSpeechError;
+    const onSpeechStart = ExpoStt.addOnSpeechStartListener(() => {
+      setResults([]);
+    });
 
-    getSavedResponses();
+    const onSpeechResult = ExpoStt.addOnSpeechResultListener(({ value }) => {
+      setResults(value);
+    });
+
+    const onSpeechCancelled = ExpoStt.addOnSpeechCancelledListener(() => {
+      setResults([]);
+    });
+
+    const onSpeechError = ExpoStt.addOnSpeechErrorListener(({ cause }) => {
+      console.error(cause);
+    });
+
+    const onSpeechEnd = ExpoStt.addOnSpeechEndListener(() => {
+      setResults([]);
+    });
 
     return () => {
-      Voice.destroy().then(Voice.removeAllListeners);
+      onSpeechStart.remove();
+      onSpeechResult.remove();
+      onSpeechCancelled.remove();
+      onSpeechError.remove();
+      onSpeechEnd.remove();
     };
   }, []);
-
-  const onSpeechResults = (e: SpeechResultsEvent) => {
-    setResults(e.value ?? []);
-  };
-
-  const onSpeechError = (e: SpeechErrorEvent) => {
-    console.error(e);
-    setIsListening(false);
-  };
-
-  const startRecognition = async () => {
-    try {
-      await Voice.start('en-US');
-      setIsListening(true);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const stopRecognition = async () => {
-    try {
-      await Voice.stop();
-      setIsListening(false);
-      if (results.length > 0) {
-        sendToChatGPT(results[0]);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const sendToChatGPT = async (message: string) => {
     try {
@@ -171,11 +157,11 @@ const VoiceToText: React.FC = () => {
       <TouchableOpacity
         onPressIn={() => {
           animateButton(1.5);
-          startRecognition();
+          ExpoStt.startSpeech();
         }}
         onPressOut={() => {
           animateButton(1);
-          stopRecognition();
+          ExpoStt.stopSpeech();
         }}
         style={styles.recordButton}
       >
