@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import useRecommendation from '../hooks/useRecommendation';
+import useRecommendation from '@/hooks/useRecommendation';
 
 interface Message {
   role: 'user' | 'system' | 'assistant';
@@ -56,13 +56,27 @@ const TextChat: React.FC = () => {
     }
   };
 
-  const sendMessage = async (message: string) => {
+  const sendMessage = (message: string) => {
     const userMessage: Message = { role: 'user', content: message };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
     setInputText('');
     saveMessages(updatedMessages);
     handleSearch(message);
+
+    // Add the assistant message after getting results
+    if (results.length > 0) {
+      const assistantMessage: Message = {
+        role: 'assistant',
+        content: results[0].response,
+      };
+      const updatedMessagesWithResponse = [
+        ...updatedMessages,
+        assistantMessage,
+      ];
+      setMessages(updatedMessagesWithResponse);
+      saveMessages(updatedMessagesWithResponse);
+    }
   };
 
   const scrollToBottom = () => {
@@ -83,15 +97,6 @@ const TextChat: React.FC = () => {
             }
           >
             <Text>{item.content}</Text>
-          </View>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
-      <FlatList
-        data={results}
-        renderItem={({ item }) => (
-          <View style={styles.assistantMessage}>
-            <Text>{item.response}</Text>
           </View>
         )}
         keyExtractor={(item, index) => index.toString()}
